@@ -1,0 +1,653 @@
+{
+  "id": "rfSheetToReel001",
+  "name": "Reel Factory – sheet to reel",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000001",
+      "name": "Every hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9a3e5c10-0000-4000-8000-000000000002",
+      "name": "Start (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reel-factory/sheet-render",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000003",
+      "name": "Render a row (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "4d1f7a2b-8c3e-4f5a-9b6c-0d1e2f3a4b5c"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── Settings for this workflow ─────────────────────────────────────────────\n// Google Sheet with the language tabs (the long ID in its URL)\nconst SPREADSHEET_ID = '11saBfyb7nnLA9OE5OCebVTGsCHQ2slrig6jbNJPxDrE';\n// Renderer URL. On the VPS this is the docker service; locally set REEL_FACTORY_URL.\nlet renderer = 'http://reel-factory:3077';\ntry { renderer = $env.REEL_FACTORY_URL || renderer; } catch (e) { /* env access blocked */ }\n// ───────────────────────────────────────────────────────────────────────────\n\n// The webhook trigger can ask for one row: POST {\"sheet\": \"German\", \"id\": \"DE-001\"}\nconst body = $input.first().json.body ?? {};\nreturn [{ json: { spreadsheetId: SPREADSHEET_ID, renderer, sheet: body.sheet ?? null, id: body.id ?? null } }];\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000004",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Brand",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000005",
+      "name": "Read Brand",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4nxtAIdhOUZnz1b9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Languages",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000006",
+      "name": "Read Languages",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        720,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4nxtAIdhOUZnz1b9",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.Sheet }}",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000007",
+      "name": "Read language tab",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4nxtAIdhOUZnz1b9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Pick next row').first().json.sheet }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": []
+        },
+        "options": {
+          "handlingExtraData": "ignoreIt"
+        }
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000008",
+      "name": "Mark rendering",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2160,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4nxtAIdhOUZnz1b9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Pick next row').first().json.sheet }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": []
+        },
+        "options": {
+          "handlingExtraData": "ignoreIt"
+        }
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000009",
+      "name": "Save result",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3600,
+        -200
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4nxtAIdhOUZnz1b9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Keep the languages whose \"Enabled\" column is not FALSE/no/0; one item per language tab to read.\nconst off = new Set(['false', 'no', '0', 'off']);\nconst wanted = $('Config').first().json.sheet;\nreturn $input.all().filter((item) => {\n  const lang = item.json;\n  if (!lang.Sheet) return false;\n  if (wanted) return String(lang.Sheet).trim().toLowerCase() === String(wanted).trim().toLowerCase();\n  return !off.has(String(lang.Enabled ?? '').trim().toLowerCase());\n});\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000010",
+      "name": "Enabled languages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Choose the row to render: the \"ready\" row with the earliest Publish date across all language tabs,\n// or the row given by the webhook ({sheet, id}). Outputs nothing when there is no work.\nconst cfg = $('Config').first().json;\n\nfunction parseDate(v) {\n  if (v === null || v === undefined || v === '') return Infinity;\n  if (typeof v === 'number') return Math.round((v - 25569) * 86400000); // Sheets serial date\n  const t = Date.parse(String(v).trim().replace(' ', 'T'));\n  return Number.isNaN(t) ? Infinity : t;\n}\n\nconst rows = $input.all().map((item, i) => ({\n  row: item.json,\n  language: $('Enabled languages').itemMatching(i).json,\n}));\n\nlet candidates;\nif (cfg.id) {\n  candidates = rows.filter((r) => String(r.row.ID).trim() === String(cfg.id).trim());\n  candidates = candidates.filter((r) => String(r.row.Status).trim().toLowerCase() !== 'rendering');\n} else {\n  candidates = rows.filter((r) => String(r.row.Status ?? '').trim().toLowerCase() === 'ready');\n}\nif (!candidates.length) return [];\n\ncandidates.sort((a, b) => parseDate(a.row['Publish date']) - parseDate(b.row['Publish date']));\nconst { row, language } = candidates[0];\n\nconst brand = {};\nfor (const { json } of $('Read Brand').all()) {\n  if (json.Key) brand[String(json.Key).trim()] = json.Value === undefined ? '' : String(json.Value).trim();\n}\n\nreturn [{ json: { sheet: language.Sheet, rowNumber: row.row_number, id: row.ID, row, language, brand, renderer: cfg.renderer } }];\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000011",
+      "name": "Pick next row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turn the picked row into a reel-factory render request. Never throws: on a problem it returns\n// { ok: false, error } so the row is marked \"failed\" with the reason.\nconst { sheet, row, language: lang, brand, renderer } = $input.first().json;\nconst s = (v) => (v === undefined || v === null ? '' : String(v).trim());\n\nfunction deepMerge(a, b) {\n  if (Array.isArray(b) || typeof b !== 'object' || b === null) return b;\n  const out = { ...(a || {}) };\n  for (const [k, v] of Object.entries(b)) out[k] = deepMerge(out[k], v);\n  return out;\n}\nconst slug = (v) => s(v).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');\n\n// One builder per template: how the sheet columns become template data.\nconst builders = {\n  'vocab-quiz': () => {\n    const items = s(row.Vocabs)\n      .split(/\\r?\\n/)\n      .map((line) => line.trim())\n      .filter(Boolean)\n      .map((line) => {\n        const [word, ipa, imageKey, imagePrompt] = line.split('|').map((p) => p.trim());\n        const item = { word };\n        if (ipa) item.ipa = ipa;\n        if (imageKey) item.imageKey = imageKey;\n        if (imagePrompt) item.imagePrompt = imagePrompt;\n        return item;\n      });\n    if (!items.length) throw new Error('Vocabs is empty (one per line: word | IPA | image key)');\n    const cta = {\n      headline: s(lang['CTA headline']) || undefined,\n      subheadline: s(lang['CTA subheadline']) || undefined,\n      buttonText: s(lang['CTA button']) || undefined,\n      footerText: s(lang['CTA footer']) || undefined,\n      image: s(brand.ctaImage) || undefined,\n    };\n    return {\n      title: s(row.Title) || s(lang['Question title']) || undefined,\n      flag: s(lang.Flag).toLowerCase() || undefined,\n      items,\n      engagement: { enabled: true, text: s(lang['Comment prompt']) || undefined },\n      cta,\n    };\n  },\n};\n\ntry {\n  const template = s(row.Template) || s(brand.defaultTemplate) || 'vocab-quiz';\n  const build = builders[template];\n  if (!build) throw new Error(`No sheet mapping for template \"${template}\" yet`);\n\n  const name = s(row['Published name']) || s(row.ID);\n  if (!name) throw new Error('Published name is empty');\n\n  let request = {\n    template,\n    layout: s(row.Layout) || s(brand.defaultLayout) || undefined,\n    brand: {\n      name: s(brand.name) || undefined,\n      website: s(brand.website) || undefined,\n      logo: s(brand.logo) || undefined,\n      primaryColor: s(brand.primaryColor) || undefined,\n      accentColor: s(brand.accentColor) || undefined,\n      wordmark: s(brand.wordmark) ? s(brand.wordmark).split(',').map((p) => p.trim()).filter(Boolean) : undefined,\n    },\n    voice: { provider: s(lang['Voice provider']) || undefined, voice: s(lang.Voice) || undefined },\n    output: { quality: s(brand.quality) || 'standard', name: name.replace(/\\s+/g, '-'), folder: s(lang['Video folder']) || slug(sheet) },\n    data: build(),\n    meta: { sheet, id: s(row.ID), rowNumber: row.row_number },\n  };\n\n  const options = s(row['Options (JSON)']);\n  if (options) {\n    let parsed;\n    try {\n      parsed = JSON.parse(options);\n    } catch (e) {\n      throw new Error(`Options (JSON) is not valid JSON: ${e.message}`);\n    }\n    request = deepMerge(request, parsed);\n  }\n  // Drop undefined values so the renderer's defaults apply\n  request = JSON.parse(JSON.stringify(request));\n  return [{ json: { ok: true, request, renderer } }];\n} catch (e) {\n  return [{ json: { ok: false, error: e.message, renderer } }];\n}\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000012",
+      "name": "Build render request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Row update right after picking: \"rendering\", or \"failed\" when the request could not be built.\nconst picked = $('Pick next row').first().json;\nconst built = $input.first().json;\nreturn [{\n  json: {\n    row_number: picked.rowNumber,\n    Status: built.ok ? 'rendering' : 'failed',\n    Error: built.ok ? '' : built.error,\n    'Video URL': '',\n    'Thumbnail URL': '',\n    'Duration (s)': '',\n    'Images generated': '',\n    'Rendered at': '',\n    'Job ID': '',\n  },\n}];\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000013",
+      "name": "Row status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a3e5c10-0000-4000-8000-000000000014",
+              "leftValue": "={{ $('Build render request').first().json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000015",
+      "name": "Built OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Build render request').first().json.renderer }}/render",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$('Build render request').first().json.request, callbackUrl: $execution.resumeUrl }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000016",
+      "name": "Start render",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        -100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "rfApiKeyLocal001",
+          "name": "Reel Factory API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a3e5c10-0000-4000-8000-000000000017",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 202,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000018",
+      "name": "Render accepted?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 30,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000019",
+      "name": "Wait for video",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        -200
+      ],
+      "webhookId": "7e2a9c4d-1b3f-4e5a-8c6d-9f0a1b2c3d4e"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Row update with the render result. Input is either the renderer's callback (Wait node: body = job)\n// or the HTTP response when the renderer refused the request (statusCode 4xx/5xx).\nconst picked = $('Pick next row').first().json;\nconst input = $input.first().json;\nlet job;\nif (input.statusCode === 202) {\n  job = { status: 'failed', id: input.body?.id, error: 'Timed out waiting for the renderer (no callback within 30 min)' };\n} else if (input.statusCode !== undefined) {\n  job = { status: 'failed', error: input.body?.error || `Renderer answered HTTP ${input.statusCode}` };\n} else {\n  job = input.body ?? input;\n}\nconst done = job.status === 'done';\nconst generated = job.images?.generated ?? [];\nreturn [{\n  json: {\n    row_number: picked.rowNumber,\n    Status: done ? 'rendered' : 'failed',\n    'Video URL': done ? job.videoUrl : '',\n    'Thumbnail URL': done ? job.thumbnailUrl : '',\n    'Duration (s)': done ? Math.round(job.duration * 10) / 10 : '',\n    'Images generated': generated.join(', '),\n    'Rendered at': done ? new Date(job.finishedAt || Date.now()).toISOString().replace('T', ' ').slice(0, 16) : '',\n    'Job ID': job.id || '',\n    Error: done ? '' : String(job.error || job.status || 'unknown error').slice(0, 500),\n  },\n}];\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000020",
+      "name": "Result fields",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mark the execution as failed (so n8n error workflows / notifications fire) after the row was updated.\nlet result = null;\ntry {\n  result = $('Result fields').first().json;\n} catch (e) {\n  // \"Result fields\" did not run: the request could not be built (row already marked failed)\n}\nif (!result) {\n  throw new Error(`Could not build the render request: ${$('Build render request').first().json.error}`);\n}\nif (result.Status !== 'rendered') throw new Error(`Render failed for row ${result.row_number}: ${result.Error}`);\nreturn [{ json: { ...$('Pick next row').first().json, result } }];\n"
+      },
+      "id": "9a3e5c10-0000-4000-8000-000000000021",
+      "name": "Fail if render failed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        -200
+      ]
+    }
+  ],
+  "connections": {
+    "Every hour": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start (manual)": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render a row (webhook)": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Read Brand",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Brand": {
+      "main": [
+        [
+          {
+            "node": "Read Languages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Languages": {
+      "main": [
+        [
+          {
+            "node": "Enabled languages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enabled languages": {
+      "main": [
+        [
+          {
+            "node": "Read language tab",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read language tab": {
+      "main": [
+        [
+          {
+            "node": "Pick next row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick next row": {
+      "main": [
+        [
+          {
+            "node": "Build render request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build render request": {
+      "main": [
+        [
+          {
+            "node": "Row status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Row status": {
+      "main": [
+        [
+          {
+            "node": "Mark rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark rendering": {
+      "main": [
+        [
+          {
+            "node": "Built OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Built OK?": {
+      "main": [
+        [
+          {
+            "node": "Start render",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fail if render failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start render": {
+      "main": [
+        [
+          {
+            "node": "Render accepted?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render accepted?": {
+      "main": [
+        [
+          {
+            "node": "Wait for video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Result fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for video": {
+      "main": [
+        [
+          {
+            "node": "Result fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Result fields": {
+      "main": [
+        [
+          {
+            "node": "Save result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save result": {
+      "main": [
+        [
+          {
+            "node": "Fail if render failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

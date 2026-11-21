@@ -1,0 +1,14 @@
+# Kept out of git (Hamid, 21 Nov 2026: the repo is private, code and templates only)
+node_modules/
+.venv-piper/
+models/
+data/
+renders/
+library/
+samples/
+local-n8n/
+sheets/*.xlsx
+.env
+.env.*
+!.env.example
+.DS_Store

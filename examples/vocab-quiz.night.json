@@ -1,0 +1,55 @@
+{
+  "template": "vocab-quiz",
+  "layout": "night",
+  "brand": {
+    "name": "FluentHub",
+    "website": "fluenthub.app",
+    "primaryColor": "#1d3b40",
+    "accentColor": "#43a41a",
+    "wordmark": [
+      "Fluent",
+      "Hub"
+    ]
+  },
+  "voice": {
+    "provider": "piper",
+    "voice": "en_US-lessac-medium"
+  },
+  "output": {
+    "fps": 30,
+    "quality": "standard"
+  },
+  "data": {
+    "title": "What is this called?",
+    "flag": "us",
+    "items": [
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/duvet.png",
+        "word": "Duvet",
+        "ipa": "/duːˈveɪ/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/alarm-clock.png",
+        "word": "Alarm clock",
+        "ipa": "/əˈlɑrm klɑk/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/bed.png",
+        "word": "Bed",
+        "ipa": "/bɛd/"
+      }
+    ],
+    "engagement": {
+      "enabled": true,
+      "text": "Let me know in the comments!"
+    },
+    "cta": {
+      "headline": "Way more than vocab",
+      "image": "http://localhost:3077/samples/vocab-bedroom/app-phones.png"
+    }
+  },
+  "meta": {
+    "workflow": "bedroom-vocab",
+    "topic": "Bedroom"
+  }
+}

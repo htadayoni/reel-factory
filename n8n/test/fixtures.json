@@ -1,0 +1,163 @@
+{
+  "Brand": [
+    {
+      "Key": "name",
+      "Value": "FluentHub"
+    },
+    {
+      "Key": "website",
+      "Value": "fluenthub.app"
+    },
+    {
+      "Key": "primaryColor",
+      "Value": "#1d3b40"
+    },
+    {
+      "Key": "accentColor",
+      "Value": "#43a41a"
+    },
+    {
+      "Key": "wordmark",
+      "Value": "Fluent,Hub"
+    },
+    {
+      "Key": "logo",
+      "Value": ""
+    },
+    {
+      "Key": "ctaImage",
+      "Value": ""
+    },
+    {
+      "Key": "defaultTemplate",
+      "Value": "vocab-quiz"
+    },
+    {
+      "Key": "defaultLayout",
+      "Value": "classic"
+    },
+    {
+      "Key": "quality",
+      "Value": "draft"
+    }
+  ],
+  "Languages": [
+    {
+      "Sheet": "English",
+      "Language code": "en-US",
+      "Enabled": true,
+      "Flag": "us",
+      "Voice provider": "piper",
+      "Voice": "en_US-lessac-medium",
+      "Question title": "What is this called?",
+      "Comment prompt": "Let me know in the comments!",
+      "CTA headline": "Way more than vocab",
+      "CTA subheadline": "All inside fluenthub.app",
+      "CTA button": "DOWNLOAD NOW!",
+      "CTA footer": "LINK IN PROFILE",
+      "Video folder": "english",
+      "Default hashtags": "#learnenglish"
+    },
+    {
+      "Sheet": "German",
+      "Language code": "de-DE",
+      "Enabled": true,
+      "Flag": "de",
+      "Voice provider": "piper",
+      "Voice": "de_DE-thorsten-medium",
+      "Question title": "Wie heißt das?",
+      "Comment prompt": "Schreib's in die Kommentare!",
+      "CTA headline": "Viel mehr als Vokabeln",
+      "CTA subheadline": "Alles in fluenthub.app",
+      "CTA button": "JETZT LADEN!",
+      "CTA footer": "LINK IN DER BIO",
+      "Video folder": "german",
+      "Default hashtags": "#deutschlernen"
+    },
+    {
+      "Sheet": "Spanish",
+      "Language code": "es-ES",
+      "Enabled": false,
+      "Flag": "es"
+    }
+  ],
+  "Tabs": {
+    "English": [
+      {
+        "ID": "EN-001",
+        "Status": "ready",
+        "Topic": "Bedroom",
+        "Template": "vocab-quiz",
+        "Layout": "classic",
+        "Vocabs": "Duvet | /duːˈveɪ/ | duvet\nHeadboard | /ˈhɛdˌbɔrd/ | headboard\nNightstand | /ˈnaɪtˌstænd/ | nightstand\nPillowcase | /ˈpɪloʊˌkeɪs/ | pillowcase\nAlarm clock | /əˈlɑrm klɑk/ | alarm-clock\nWardrobe | /ˈwɔrˌdroʊb/ | wardrobe\nHanger | /ˈhæŋər/ | hanger\nMattress | /ˈmætrəs/ | mattress\nBlanket | /ˈblæŋkɪt/ | blanket\nSlippers | /ˈslɪpərz/ | slippers\nPajamas | /pəˈdʒɑməz/ | pajamas\nBed | /bɛd/ | bed",
+        "Title": "",
+        "Published name": "en-bedroom-01",
+        "Publish date": "2026-10-20 18:00",
+        "Platforms": "instagram, tiktok",
+        "Caption": "…",
+        "Hashtags": "",
+        "Options (JSON)": ""
+      },
+      {
+        "ID": "EN-002",
+        "Status": "draft",
+        "Topic": "Kitchen",
+        "Template": "vocab-quiz",
+        "Layout": "night",
+        "Vocabs": "Kettle | /ˈkɛtəl/ | kettle\nToaster | /ˈtoʊstər/ | toaster\nFrying pan | /ˈfraɪɪŋ pæn/ | frying-pan\nWhisk | /wɪsk/ | whisk\nCutting board | /ˈkʌtɪŋ bɔrd/ | cutting-board\nColander | /ˈkɑləndər/ | colander\nLadle | /ˈleɪdəl/ | ladle\nFridge | /frɪdʒ/ | fridge",
+        "Title": "",
+        "Published name": "en-kitchen-01",
+        "Publish date": "2026-10-22 18:00",
+        "Options (JSON)": "{\"voice\": {\"provider\": \"openrouter\", \"voice\": \"george\"}}"
+      },
+      {
+        "ID": "EN-900",
+        "Status": "draft",
+        "Topic": "Broken options",
+        "Template": "vocab-quiz",
+        "Layout": "classic",
+        "Vocabs": "Bed | /bɛd/ | bed",
+        "Title": "",
+        "Published name": "en-broken",
+        "Publish date": "",
+        "Options (JSON)": "{not json"
+      },
+      {
+        "ID": "EN-901",
+        "Status": "draft",
+        "Topic": "Bad layout",
+        "Template": "vocab-quiz",
+        "Layout": "neon",
+        "Vocabs": "Bed | /bɛd/ | bed",
+        "Title": "",
+        "Published name": "en-bad-layout",
+        "Publish date": "",
+        "Options (JSON)": ""
+      }
+    ],
+    "German": [
+      {
+        "ID": "DE-001",
+        "Status": "ready",
+        "Topic": "Schlafzimmer",
+        "Template": "vocab-quiz",
+        "Layout": "classic",
+        "Vocabs": "die Bettdecke | /diː ˈbɛtˌdɛkə/ | duvet\nder Nachttisch | /deːɐ̯ ˈnaxtˌtɪʃ/ | nightstand\nder Wecker | /deːɐ̯ ˈvɛkɐ/ | alarm-clock\nder Kleiderschrank | /deːɐ̯ ˈklaɪ̯dɐˌʃʁaŋk/ | wardrobe\nder Kleiderbügel | /deːɐ̯ ˈklaɪ̯dɐˌbyːɡl̩/ | hanger\ndie Matratze | /diː maˈtʁat͡sə/ | mattress\ndie Hausschuhe | /diː ˈhaʊ̯sˌʃuːə/ | slippers\ndas Bett | /das bɛt/ | bed",
+        "Title": "",
+        "Published name": "de-schlafzimmer-01",
+        "Publish date": "2026-10-21 18:00",
+        "Options (JSON)": ""
+      }
+    ],
+    "Spanish": [
+      {
+        "ID": "ES-001",
+        "Status": "ready",
+        "Topic": "Disabled language",
+        "Vocabs": "x",
+        "Published name": "es",
+        "Publish date": "2020-01-01 10:00"
+      }
+    ]
+  }
+}

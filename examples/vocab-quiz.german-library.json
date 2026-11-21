@@ -1,0 +1,19 @@
+{
+  "template": "vocab-quiz",
+  "layout": "classic",
+  "brand": { "name": "FluentHub", "website": "fluenthub.app", "primaryColor": "#1d3b40", "accentColor": "#43a41a", "wordmark": ["Fluent", "Hub"] },
+  "voice": { "provider": "piper", "voice": "de_DE-thorsten-medium" },
+  "output": { "fps": 30, "quality": "draft", "name": "de-schlafzimmer-01", "folder": "german" },
+  "data": {
+    "title": "Wie heißt das?",
+    "flag": "de",
+    "items": [
+      { "word": "die Bettdecke", "ipa": "/diː ˈbɛtˌdɛkə/", "imageKey": "duvet" },
+      { "word": "der Wecker", "ipa": "/deːɐ̯ ˈvɛkɐ/", "imageKey": "alarm-clock" },
+      { "word": "das Bett", "ipa": "/das bɛt/", "imageKey": "bed" }
+    ],
+    "engagement": { "enabled": true, "text": "Schreib's in die Kommentare!" },
+    "cta": { "headline": "Viel mehr als Vokabeln", "subheadline": "Alles in fluenthub.app", "buttonText": "JETZT LADEN!", "footerText": "LINK IN DER BIO" }
+  },
+  "meta": { "sheet": "German", "row": 2 }
+}

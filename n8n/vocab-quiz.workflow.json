@@ -1,0 +1,167 @@
+{
+  "id": "rfVocabQuiz00001",
+  "name": "Reel Factory – vocab quiz",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7f1d2c9e-0001-4a51-9a10-000000000001",
+      "name": "Start (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reel-factory/vocab-quiz",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "7f1d2c9e-0002-4a51-9a10-000000000002",
+      "name": "Render request (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        100
+      ],
+      "webhookId": "0c6a4b8e-5d2f-4f0b-9a7c-3e1f5a7b9c01"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Builds the render request. Values come from the webhook body when called by another\n// workflow/app (POST {topic, items, layout, brand, ...}); the defaults below are for manual runs.\nlet renderer = 'http://reel-factory:3077'; // VPS: renderer container on the docker network\ntry { renderer = $env.REEL_FACTORY_URL || renderer; } catch (e) { /* env access blocked: keep default */ }\nconst input = $json.body ?? {};\nconst samples = `${renderer}/samples/vocab-bedroom`;\n\nconst items = input.items ?? [\n  { image: `${samples}/duvet.png`, word: 'Duvet', ipa: '/duːˈveɪ/' },\n  { image: `${samples}/alarm-clock.png`, word: 'Alarm clock', ipa: '/əˈlɑrm klɑk/' },\n  { image: `${samples}/wardrobe.png`, word: 'Wardrobe', ipa: '/ˈwɔrˌdroʊb/' },\n  { image: `${samples}/bed.png`, word: 'Bed', ipa: '/bɛd/' },\n];\n\nreturn [{\n  json: {\n    renderer,\n    request: {\n      template: 'vocab-quiz',\n      layout: input.layout ?? 'classic',\n      brand: input.brand ?? {\n        name: 'FluentHub',\n        website: 'fluenthub.app',\n        primaryColor: '#1d3b40',\n        accentColor: '#43a41a',\n        wordmark: ['Fluent', 'Hub'],\n      },\n      voice: input.voice ?? { provider: 'piper', voice: 'en_US-lessac-medium' },\n      output: input.output ?? { fps: 30, quality: 'standard' },\n      data: {\n        title: input.title ?? 'What is this called?',\n        flag: input.flag ?? 'us',\n        items,\n        engagement: input.engagement ?? { enabled: true, text: 'Let me know in the comments!' },\n        cta: input.cta ?? { headline: 'Way more than vocab', image: `${samples}/app-phones.png` },\n        sounds: input.sounds ?? { countdown: 'tick' },\n      },\n      meta: { topic: input.topic ?? 'Bedroom', executionId: $execution.id },\n    },\n  },\n}];"
+      },
+      "id": "7f1d2c9e-0003-4a51-9a10-000000000003",
+      "name": "Build render request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.renderer }}/render",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ...$json.request, callbackUrl: $execution.resumeUrl }) }}",
+        "options": {}
+      },
+      "id": "7f1d2c9e-0004-4a51-9a10-000000000004",
+      "name": "Start render",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "rfApiKeyLocal001",
+          "name": "Reel Factory API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 30,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "id": "7f1d2c9e-0005-4a51-9a10-000000000005",
+      "name": "Wait for video",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        0
+      ],
+      "webhookId": "5b0c6a0e-1c2d-4e3f-8a9b-7d6e5f4a3b02"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The renderer POSTs the finished job to this execution's resume URL.\nconst job = $json.body ?? $json;\nif (job.status !== 'done') {\n  throw new Error(`Render failed: ${job.error || job.status}`);\n}\nreturn [{ json: { videoUrl: job.videoUrl, thumbnailUrl: job.thumbnailUrl, duration: job.duration, renderSeconds: job.renderSeconds, jobId: job.id, meta: job.meta } }];"
+      },
+      "id": "7f1d2c9e-0006-4a51-9a10-000000000006",
+      "name": "Video ready",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Start (manual)": {
+      "main": [
+        [
+          {
+            "node": "Build render request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render request (webhook)": {
+      "main": [
+        [
+          {
+            "node": "Build render request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build render request": {
+      "main": [
+        [
+          {
+            "node": "Start render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start render": {
+      "main": [
+        [
+          {
+            "node": "Wait for video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for video": {
+      "main": [
+        [
+          {
+            "node": "Video ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

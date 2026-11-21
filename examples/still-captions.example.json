@@ -1,0 +1,37 @@
+{
+  "template": "still-captions",
+  "layout": "light",
+  "brand": {
+    "name": "Your Brand",
+    "website": "example.com",
+    "primaryColor": "#1A1A1A",
+    "accentColor": "#2B6CB0"
+  },
+  "voice": {
+    "provider": "piper",
+    "voice": "en_US-lessac-medium"
+  },
+  "output": {
+    "fps": 30,
+    "quality": "draft"
+  },
+  "data": {
+    "lines": [
+      "Here is a *simple idea* worth keeping.",
+      "One picture, a few words at a time."
+    ],
+    "imageSubject": "a lighthouse on a calm sea",
+    "imageStyle": {
+      "id": "flat-calm",
+      "prompt": "Flat illustration, soft colors, plain light background. Subject: {subject}. No text, no letters, no logos."
+    },
+    "theme": {
+      "bg": "#FAFAF7"
+    },
+    "cta": {
+      "enabled": true,
+      "text": "Read more",
+      "handle": "example.com"
+    }
+  }
+}

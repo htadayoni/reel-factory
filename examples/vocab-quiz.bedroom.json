@@ -1,0 +1,100 @@
+{
+  "template": "vocab-quiz",
+  "layout": "classic",
+  "brand": {
+    "name": "FluentHub",
+    "website": "fluenthub.app",
+    "primaryColor": "#1d3b40",
+    "accentColor": "#43a41a",
+    "wordmark": [
+      "Fluent",
+      "Hub"
+    ]
+  },
+  "voice": {
+    "provider": "piper",
+    "voice": "en_US-lessac-medium"
+  },
+  "output": {
+    "fps": 30,
+    "quality": "standard"
+  },
+  "data": {
+    "title": "What is this called?",
+    "flag": "us",
+    "items": [
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/duvet.png",
+        "word": "Duvet",
+        "ipa": "/duːˈveɪ/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/headboard.png",
+        "word": "Headboard",
+        "ipa": "/ˈhɛdˌbɔrd/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/nightstand.png",
+        "word": "Nightstand",
+        "ipa": "/ˈnaɪtˌstænd/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/pillowcase.png",
+        "word": "Pillowcase",
+        "ipa": "/ˈpɪloʊˌkeɪs/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/alarm-clock.png",
+        "word": "Alarm clock",
+        "ipa": "/əˈlɑrm klɑk/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/wardrobe.png",
+        "word": "Wardrobe",
+        "ipa": "/ˈwɔrˌdroʊb/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/hanger.png",
+        "word": "Hanger",
+        "ipa": "/ˈhæŋər/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/mattress.png",
+        "word": "Mattress",
+        "ipa": "/ˈmætrəs/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/blanket.png",
+        "word": "Blanket",
+        "ipa": "/ˈblæŋkɪt/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/slippers.png",
+        "word": "Slippers",
+        "ipa": "/ˈslɪpərz/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/pajamas.png",
+        "word": "Pajamas",
+        "ipa": "/pəˈdʒɑməz/"
+      },
+      {
+        "image": "http://localhost:3077/samples/vocab-bedroom/bed.png",
+        "word": "Bed",
+        "ipa": "/bɛd/"
+      }
+    ],
+    "engagement": {
+      "enabled": true,
+      "text": "Let me know in the comments!"
+    },
+    "cta": {
+      "headline": "Way more than vocab",
+      "image": "http://localhost:3077/samples/vocab-bedroom/app-phones.png"
+    }
+  },
+  "meta": {
+    "workflow": "bedroom-vocab",
+    "topic": "Bedroom"
+  }
+}
